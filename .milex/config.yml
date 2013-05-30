@@ -1,0 +1,7 @@
+targets:
+    prod:
+        host: dev.astrotraker.com
+        path: /var/www/com.astrotraker
+        ssh:
+            user: msmith
+            password: pass

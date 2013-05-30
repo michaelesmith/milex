@@ -1,0 +1,4 @@
+targets:
+    prod:
+        host: dev.astrotraker.com
+        path: /var/www/com.astrotraker

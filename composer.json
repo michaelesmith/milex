@@ -1,0 +1,31 @@
+{
+    "name": "michaelesmith/datetime",
+    "version": "0.1",
+    "description": "Add default cli application with convenience methods",
+    "keywords": ["cli", "deploy", "deployment"],
+    "homepage": "http://github.com/michaelesmith/milex",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Michael Smith",
+            "email": "sitecross@gmail.com",
+            "homepage": "http://michaelsmithonline.blogspot.com/"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/michaelesmith/milex/issues"
+    },
+    "require": {
+        "php": ">=5.3.3",
+        "cilex/cilex": "1.0.*@dev",
+        "cilex/console-service-provider": "1.0.*@dev",
+        "symfony/yaml": ">=1.0.0",
+        "symfony/config": "2.4.*@dev",
+        "herzult/php-ssh": "dev-master"
+    },
+    "autoload": {
+        "psr-0": { "Milex": "src/" }
+    },
+    "minimum-stability": "beta"
+}
