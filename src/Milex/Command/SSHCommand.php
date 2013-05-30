@@ -9,6 +9,7 @@ namespace Milex\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Exception\InvalidArgumentException;
 
 class SSHCommand extends Command{
 
@@ -50,6 +51,9 @@ class SSHCommand extends Command{
         foreach($container['config']['targets'] as $target => $config){
             $configuration = new \Ssh\Configuration($config['host']);
             if(isset($sshConfig['identityFile'])){
+                if(!$sshConfig['user'] || !$sshConfig['identityFile']){
+                    throw new InvalidArgumentException('Both ssh-user and ssh-identity-file must be given to use public key authentication');
+                }
                 $sshAuth = new \Ssh\Authentication\PublicKeyFile(
                     $sshConfig['user'],
                     $sshConfig['identityFile'] . '.pub',
@@ -57,6 +61,9 @@ class SSHCommand extends Command{
                     isset($sshConfig['password']) ? $sshConfig['password'] : null
                 );
             }else{
+                if(!$sshConfig['user'] || !$sshConfig['password']){
+                    throw new InvalidArgumentException('Both ssh-user and ssh-password must be given to use password authentication');
+                }
                 $sshAuth = new \Ssh\Authentication\Password($sshConfig['user'], $sshConfig['password']);
             }
             $ssh[$target] = new \Ssh\Session($configuration, $sshAuth);
