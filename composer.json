@@ -25,6 +25,7 @@
         "symfony/finder": "2.3.*",
         "herzult/php-ssh": "dev-master"
     },
+    "bin": [ "bin/milex" ],
     "autoload": {
         "psr-0": { "Milex": "src/" }
     },
