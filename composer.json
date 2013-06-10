@@ -1,7 +1,7 @@
 {
-    "name": "michaelesmith/datetime",
+    "name": "michaelesmith/milex",
     "version": "0.1",
-    "description": "Add default cli application with convenience methods",
+    "description": "Milex: the deployment framework for PHP",
     "keywords": ["cli", "deploy", "deployment"],
     "homepage": "http://github.com/michaelesmith/milex",
     "type": "library",
