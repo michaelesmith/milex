@@ -48,7 +48,19 @@ class SSHCommand extends Command{
 
         $ssh = array();
 
-        foreach($container['config']['targets'] as $target => $config){
+        foreach($this->targets as $target => $config){
+            if(isset($config['ssh']) && isset($config['ssh']['identityFile'])){
+                $sshConfig['identityFile'] = $config['ssh']['identityFile'];
+            }
+
+            if(isset($config['ssh']) && isset($config['ssh']['user'])){
+                $sshConfig['user'] = $config['ssh']['user'];
+            }
+
+            if(isset($config['ssh']) && isset($config['ssh']['password'])){
+                $sshConfig['password'] = $config['ssh']['password'];
+            }
+
             $configuration = new \Ssh\Configuration($config['host']);
             if(isset($sshConfig['identityFile'])){
                 if(!$sshConfig['user'] || !$sshConfig['identityFile']){
@@ -60,12 +72,17 @@ class SSHCommand extends Command{
                     $sshConfig['identityFile'],
                     isset($sshConfig['password']) ? $sshConfig['password'] : null
                 );
+                $method = 'identity file';
             }else{
                 if(!$sshConfig['user'] || !$sshConfig['password']){
                     throw new InvalidArgumentException('Both ssh-user and ssh-password must be given to use password authentication');
                 }
                 $sshAuth = new \Ssh\Authentication\Password($sshConfig['user'], $sshConfig['password']);
+                $method = 'password';
             }
+
+            $output->writeln(sprintf('Connecting to "%s@%s" via %s', $sshConfig['user'], $config['host'], $method));
+
             $ssh[$target] = new \Ssh\Session($configuration, $sshAuth);
         }
 

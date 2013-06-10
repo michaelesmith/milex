@@ -4,4 +4,10 @@ targets:
         path: /var/www/com.astrotraker
         ssh:
             user: msmith
-            password: pass
+#            password: pass
+    prod2:
+        host: dev.astrotraker.com
+        path: /var/www/com.astrotraker
+        ssh:
+            user: msmith
+#            password: pass

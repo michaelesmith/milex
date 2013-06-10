@@ -13,6 +13,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Command extends BaseCommand {
 
+    protected $targets = array();
+
     protected function configure()
     {
         parent::configure();
@@ -24,6 +26,25 @@ class Command extends BaseCommand {
 
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
+        $container = $this->getContainer();
+        $configTargets = $container['config']['targets'];
+
+        if(count($input->getOption('target'))){
+            $targets = $input->getOption('target');
+        }else{
+            $output->writeln('No targets given, using all configured targets');
+            $targets = array_keys($configTargets);
+        }
+
+        foreach($targets as $target){
+            if(!isset($configTargets[$target])){
+                throw new \InvalidArgumentException(sprintf('Target "%s" is not configured', $target));
+            }
+
+            $this->targets[$target] = $configTargets[$target];
+            $output->writeln(sprintf('Using target %s: %s', $target, $configTargets[$target]['host']));
+        }
+
         parent::initialize($input, $output);
     }
 
