@@ -3,9 +3,19 @@
 $loader = require __DIR__ . '/../vendor/autoload.php';
 $loader->add('MyCommands', __DIR__);
 
+$dir = posix_getcwd();
+while($dir != '/'){
+    if(file_exists($dir.'/composer.json')){
+        break;
+    }
+    $dir = dirname($dir);
+}
+
+$dir = '/' == $dir ? null : $dir;
+
 $app = new \Milex\Application('Milex', '0.1', array(
     'dir_current' => posix_getcwd(),
-    'dir_project' => dirname(__DIR__),
+    'dir_project' => $dir,
     'dir_milex' => __DIR__,
     'dir_user_home' => $_SERVER['HOME'],
 ));
