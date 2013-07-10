@@ -3,7 +3,11 @@
 $loader = require __DIR__ . '/../vendor/autoload.php';
 $loader->add('MyCommands', __DIR__);
 
-$app = new \Milex\Application('Milex', '0.1');
+$app = new \Milex\Application('Milex', '0.1', array(
+    'dir_current' => $_SERVER['PWD'],
+    'dir_milex' => __DIR__,
+    'dir_user_home' => $_SERVER['HOME'],
+));
 
 $app['config'] = function(){
     return \Symfony\Component\Yaml\Yaml::parse(

@@ -6,11 +6,11 @@
 
 namespace MyCommands;
 
-use Milex\Command\Command;
+use Milex\Command\TargetCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
-class MyCommand extends Command {
+class MyCommand extends TargetCommand {
 
     protected function configure()
     {

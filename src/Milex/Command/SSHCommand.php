@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\InvalidArgumentException;
 
-class SSHCommand extends Command{
+class SSHCommand extends TargetCommand{
 
     protected $ssh = array();
 
