@@ -60,6 +60,18 @@ class ConfigVHostCommand extends Command {
             sprintf('Added "%s.local" to /etc/hosts', $filename)
         );
 
+        $this->shell(
+            'find . -type d -exec chmod 755 {} \;',
+            $output,
+            'Fixing directory permissions'
+        );
+
+        $this->shell(
+            'find . -type f -exec chmod 644 {} \;',
+            $output,
+            'Fixing file permissions'
+        );
+
         $user = $input->getArgument('dev-user');
         $dir = $this->getService('dir_project');
         $this->shell(
@@ -69,9 +81,9 @@ class ConfigVHostCommand extends Command {
         );
 
         $this->shell(
-            sprintf('sudo -u%s x-www-browser http://%s.local', $user, $name),
+            sprintf('sudo -u%s x-www-browser http://%s.local/app_dev.php', $user, $name),
             $output,
-            sprintf('Opening browser to http://%s.local', $name)
+            sprintf('Opening browser to http://%s.local/app_dev.php', $name)
         );
 
     }
