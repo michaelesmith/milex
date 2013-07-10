@@ -20,9 +20,11 @@ class ConfigVHostCommand extends Command {
             ->setName('config:vhost')
             ->setDescription('Configure the apache vhost for this project')
             ->addArgument('name', InputArgument::REQUIRED, 'Project name')
-            ->addArgument('dev-user', InputArgument::REQUIRED, 'Development username')
+            ->addArgument('dev-user', InputArgument::OPTIONAL, 'Development username')
             ->addArgument('www-root', InputArgument::OPTIONAL, 'www root dir to use (defaults to current project/web)')
             ->addOption('overwrite', 'o', InputOption::VALUE_NONE, 'Overwrite existing config')
+            ->addOption('fix-permissions', null, InputOption::VALUE_NONE, 'Fix file and dir permissions')
+            ->addOption('no-acl', null, InputOption::VALUE_NONE, 'Do not set ACL dir permissions')
         ;
     }
 
@@ -60,25 +62,30 @@ class ConfigVHostCommand extends Command {
             sprintf('Added "%s.local" to /etc/hosts', $filename)
         );
 
-        $this->shell(
-            'find . -type d -exec chmod 755 {} \;',
-            $output,
-            'Fixing directory permissions'
-        );
+        if($input->getOption('fix-permissions')){
+            $this->shell(
+                'find . -type d -exec chmod 755 {} \;',
+                $output,
+                'Fixing directory permissions'
+            );
 
-        $this->shell(
-            'find . -type f -exec chmod 644 {} \;',
-            $output,
-            'Fixing file permissions'
-        );
+            $this->shell(
+                'find . -type f -exec chmod 644 {} \;',
+                $output,
+                'Fixing file permissions'
+            );
+        }
 
         $user = $input->getArgument('dev-user');
         $dir = $this->getService('dir_project');
-        $this->shell(
-            sprintf('setfacl -R -m u:www-data:rwX -m u:%s:rwX %s/app/cache %s/app/logs && setfacl -dR -m u:www-data:rwx -m u:%s:rwx %s/app/cache %s/app/logs', $user, $dir, $dir, $user, $dir, $dir),
-            $output,
-            sprintf('Configured ACL permissions for "www-data" and "%s" on "app/cache" and "app/logs"', $user)
-        );
+
+        if(!$input->getOption('no-acl')){
+            $this->shell(
+                sprintf('setfacl -R -m u:www-data:rwX -m u:%s:rwX %s/app/cache %s/app/logs && setfacl -dR -m u:www-data:rwx -m u:%s:rwx %s/app/cache %s/app/logs', $user, $dir, $dir, $user, $dir, $dir),
+                $output,
+                sprintf('Configured ACL permissions for "www-data" and "%s" on "app/cache" and "app/logs"', $user)
+            );
+        }
 
         $this->shell(
             sprintf('sudo -u%s x-www-browser http://%s.local/app_dev.php', $user, $name),
