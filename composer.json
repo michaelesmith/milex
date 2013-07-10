@@ -23,6 +23,7 @@
         "symfony/yaml": ">=1.0.0",
         "symfony/config": "2.3.*",
         "symfony/finder": "2.3.*",
+        "symfony/process": "2.3.*",
         "herzult/php-ssh": "dev-master"
     },
     "bin": [ "bin/milex" ],
