@@ -5,3 +5,4 @@ cilex.phar
 composer.phar
 .vagrant
 docs/.build
+composer.lock
